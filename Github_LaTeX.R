@@ -4,7 +4,7 @@ library(Hmisc)
 library(stringr)
 library(animation)
 ani.options(autobrowse = FALSE)
-converter = function(pdfname, extra.opts = "-density 150"){
+converter = function(pdfname, extra.opts = "-density 300"){
   pngname = gsub("[.]pdf$", ".png", pdfname)
   im.convert(pdfname, output = pngname, extra.opts = extra.opts)
   pngname
@@ -141,8 +141,8 @@ parse_latex = function(rmd, new_md, img_prefix = ""){
   
 
 
-rmd = "~/Desktop/README.rmd"
-new_md = "~/Desktop/README_fixed.md"
+rmd = "~/Dropbox/Packages/Github_Markdown_LaTeX/README.rmd"
+new_md = "~//Dropbox/Packages/Github_Markdown_LaTeX/README.md"
 parse_latex(rmd, 
             new_md, 
-            img_prefix = "https://raw.github.com/kalinn/IPW-SVM/master/")
+            img_prefix = "https://rawgit.com/muschellij2/Github_Markdown_LaTeX/master/")
