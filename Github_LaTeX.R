@@ -79,7 +79,8 @@ parse_latex = function(rmd, new_md, img_prefix = ""){
       file.copy(x, y, overwrite = TRUE)
     }, outfiles, filenames)
     
-    new_str = sprintf('![latex equation](%s%s)', img_prefix, basename(filenames))
+    new_str = sprintf('![latex equation](%s%s)', img_prefix, 
+                      basename(filenames))
     for (istr in seq(length(outfiles))){
       md = sub("\\$\\$(.+?)\\$\\$", 
            new_str[istr], 
@@ -125,7 +126,8 @@ parse_latex = function(rmd, new_md, img_prefix = ""){
     
     md = xmd
     md = paste(md, collapse = "\n")
-    new_str = sprintf('![latex equation](%s%s)', img_prefix, basename(filenames))
+    new_str = sprintf('![latex equation](%s%s)', img_prefix, 
+                      basename(filenames))
     for (istr in seq(length(outfiles))){
       md = sub("\\$(.+?)\\$", 
                new_str[istr], 
@@ -142,8 +144,10 @@ parse_latex = function(rmd, new_md, img_prefix = ""){
   
 
 
-rmd = "~/Dropbox/Packages/Github_Markdown_LaTeX/README.rmd"
+rmd = "~/Dropbox/Packages/Github_Markdown_LaTeX/README_unparse.Rmd"
 new_md = "~//Dropbox/Packages/Github_Markdown_LaTeX/README.md"
+img_prefix = "https://rawgit.com/muschellij2/Github_Markdown_LaTeX/master/"
+
 parse_latex(rmd, 
             new_md, 
-            img_prefix = "https://rawgit.com/muschellij2/Github_Markdown_LaTeX/master/")
+            img_prefix)
