@@ -26,6 +26,8 @@ get_latex = function(latex){
   # latex = latexTranslate(latex)
   mystr = c("\\documentclass{article}",
             "\\usepackage{amsmath}",
+            "\\usepackage{amsfonts}",
+            "\\usepackage{amssymb}",
             "\\begin{document}", 
             "\\thispagestyle{empty}",
             latex, "\\end{document}")
@@ -44,7 +46,12 @@ get_latex = function(latex){
   return(outfile)
 }
 
-parse_latex = function(rmd, new_md, img_prefix = ""){
+# insert_string = '![latex equation](%s%s)'
+parse_latex = function(rmd, new_md, img_prefix = "", 
+                       text_height = 30,
+                       insert_string = 
+                         paste0('<img src="%s%s" alt="Equation not rendered" height="', 
+                                text_height, '">')){
   outdir = dirname(rmd)
   stopifnot(file.exists(rmd))
   ext = strsplit(rmd, "[.]")[[1]]
@@ -63,8 +70,8 @@ parse_latex = function(rmd, new_md, img_prefix = ""){
   
   md = paste(md, collapse = "\n")
   double_latex = gsub("\\$\\$(.+?)\\$\\$", 
-            paste0(bad_string, "$$\\1$$", bad_string), 
-            md)
+                      paste0(bad_string, "$$\\1$$", bad_string), 
+                      md)
   double_latex = strsplit(double_latex, bad_string)[[1]]
   double_latex = double_latex[grepl("$$", double_latex, fixed=TRUE)]
   
@@ -72,19 +79,19 @@ parse_latex = function(rmd, new_md, img_prefix = ""){
   if (length(double_latex) > 0){
     outfiles = sapply(double_latex, get_latex)
     filenames = sprintf("eq_no_%02.0f.png", 
-                       seq(eq_no+1, eq_no + length(outfiles)))
+                        seq(eq_no+1, eq_no + length(outfiles)))
     eq_no = eq_no + length(outfiles)
     filenames = file.path(outdir, filenames)
     mapply(function(x, y){
       file.copy(x, y, overwrite = TRUE)
     }, outfiles, filenames)
     
-    new_str = sprintf('![latex equation](%s%s)', img_prefix, 
+    new_str = sprintf(insert_string, img_prefix, 
                       basename(filenames))
     for (istr in seq(length(outfiles))){
       md = sub("\\$\\$(.+?)\\$\\$", 
-           new_str[istr], 
-           md)
+               new_str[istr], 
+               md)
     }
     
     writeLines(md, con = tfile)
@@ -104,16 +111,16 @@ parse_latex = function(rmd, new_md, img_prefix = ""){
   rm_vals = md[rm.ind]
   md = md[-rm.ind]
   double_latex = gsub("\\$(.+?)\\$", paste0(bad_string, "$\\1$", bad_string), 
-            md)
+                      md)
   double_latex = strsplit(double_latex, bad_string)
   double_latex = unlist(sapply(double_latex, function(x){
     x = str_trim(x[grepl("$", x, fixed = TRUE)])
   }))
   #### turn all into equations
-#   double_latex = sapply(double_latex, function(x){
-#     x = paste0("$", x, "$")
-#   })
-#   
+  #   double_latex = sapply(double_latex, function(x){
+  #     x = paste0("$", x, "$")
+  #   })
+  #   
   if (length(double_latex) > 0){
     outfiles = sapply(double_latex, get_latex)
     filenames = sprintf("eq_no_%02.0f.png", 
@@ -126,7 +133,7 @@ parse_latex = function(rmd, new_md, img_prefix = ""){
     
     md = xmd
     md = paste(md, collapse = "\n")
-    new_str = sprintf('![latex equation](%s%s)', img_prefix, 
+    new_str = sprintf(insert_string, img_prefix, 
                       basename(filenames))
     for (istr in seq(length(outfiles))){
       md = sub("\\$(.+?)\\$", 
@@ -141,7 +148,7 @@ parse_latex = function(rmd, new_md, img_prefix = ""){
   file.copy(tfile, new_md, overwrite = TRUE)
   #  
 }
-  
+
 
 
 rmd = "~/Dropbox/Packages/Github_Markdown_LaTeX/README_unparse.Rmd"
@@ -151,3 +158,4 @@ img_prefix = "https://rawgit.com/muschellij2/Github_Markdown_LaTeX/master/"
 parse_latex(rmd, 
             new_md, 
             img_prefix)
+
