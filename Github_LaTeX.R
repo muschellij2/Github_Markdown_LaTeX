@@ -48,7 +48,7 @@ get_latex = function(latex){
 
 # insert_string = '![latex equation](%s%s)'
 parse_latex = function(rmd, new_md, img_prefix = "", 
-                       text_height = 30,
+                       text_height = "1em",
                        insert_string = 
                          paste0('<img src="%s%s" alt="Equation not rendered" height="', 
                                 text_height, '">')){
