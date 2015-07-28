@@ -48,10 +48,10 @@ get_latex = function(latex){
 
 # insert_string = '![latex equation](%s%s)'
 parse_latex = function(rmd, new_md, img_prefix = "", 
-                       text_height = "1em",
+                       text_height = 20,
                        insert_string = 
-                         paste0('<img src="%s%s" alt="Equation not rendered" style="height:', 
-                                text_height, ';">')){
+                         paste0('<img src="%s%s" alt="Equation not rendered" height="', 
+                                text_height, '">')){
   outdir = dirname(rmd)
   stopifnot(file.exists(rmd))
   ext = strsplit(rmd, "[.]")[[1]]
