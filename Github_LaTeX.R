@@ -4,6 +4,7 @@ library(Hmisc)
 library(stringr)
 library(animation)
 ani.options(autobrowse = FALSE)
+ani.options(interval = 0)
 converter = function(pdfname, extra.opts = "-density 300"){
   pngname = gsub("[.]pdf$", ".png", pdfname)
   im.convert(pdfname, output = pngname, extra.opts = extra.opts)
